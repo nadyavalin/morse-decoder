@@ -38,8 +38,20 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-    // write your solution here
-}
+    // используем метод match для того, чтобы разбить входную строку expr на блоки кода по 10 символов
+    // применяем метод reduce ко всем элементам массива
+    return expr.match(/.{1,10}/g).reduce((decodedString, morseCode) => { // используем флаг g, чтобы находить все совпадения в строке, а не только первое совпадение
+        // проверяем, является ли morseCode равным ********** (пробел)
+        if (morseCode === '**********') { // если пробел есть, то
+        return decodedString + ' '; // добавляем пробел к decodedString
+      } else { // если нет
+        // заменяем 00, 10 и 11 на соответствующие символы
+        const morseKey = morseCode.replace(/00/g, '').replace(/10/g, '.').replace(/11/g, '-');
+        // используем значение morseKey как ключ для получения символа из MORSE_TABLE
+        return decodedString + MORSE_TABLE[morseKey];
+      }
+    }, '');
+  }
 
 module.exports = {
     decode
